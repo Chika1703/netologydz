@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+
+  vars:
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    hostname: "{{ ansible_hostname }}"
+    welcome_message: "Здраствуй, мой господин! Мои электронные мозги желают вам хорошего дня! Ваш IP-адрес {{ ip_address }} и ваш hostname {{ hostname }}!"
+
+  tasks:
+    - name: Change motd message
+      copy:
+        content: "{{ welcome_message }}"
+        dest: /etc/motd
+      notify: restart motd
+
+  handlers:
+    - name: restart motd
+      service:
+        name: motd
+        state: restarted

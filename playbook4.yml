@@ -1,0 +1,6 @@
+---
+- hosts: all
+  become: yes
+
+  roles:
+    - sploshnaya_bol

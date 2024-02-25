@@ -1,0 +1,28 @@
+---
+- name: Playbook to download and unzip an archive on a server
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Create a directory for unzipping the archive
+      ansible.builtin.file:
+        path: /tmp/unzip
+        state: directory
+
+    - name: Install wget
+      yum: name=wget state=present
+
+    - name: Install unzip
+      yum: name=unzip state=present
+
+    - name: Install tar
+      yum: name=tar state=present
+
+    - name: Download an archive from the official Apache Kafka website
+      shell: wget -P /tmp/unzip/ --no-check-certificate https://downloads.apache.org/kafka/3.6.1/kafka-3.6.1-src.tgz
+
+    - name: Unpack the downloaded archive
+      ansible.builtin.unarchive:
+        src: /tmp/unzip/kafka-3.6.1-src.tgz
+        dest: /tmp/unzip
+        remote_src: yes
