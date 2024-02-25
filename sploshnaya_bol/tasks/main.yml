@@ -1,0 +1,24 @@
+---
+- name: Install Apache web server
+  package:
+    name: httpd
+    state: present
+
+- name: Configure index.html file
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+  notify: restart apache
+
+- name: Open port 80 in firewall
+  firewalld:
+    port: 80/tcp
+    state: enabled
+    permanent: true
+    immediate: true
+
+- name: Start and enable Apache service
+  service:
+    name: httpd
+    state: started
+    enabled: yes

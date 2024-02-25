@@ -1,0 +1,13 @@
+---
+- hosts: all
+  roles:
+    - sploshnaya_bol
+
+  tasks:
+    - name: Check if website is accessible
+      uri:
+        url: "http://{{ ansible_default_ipv4.address }}"
+      register: result
+
+    - debug:
+        var: result.status
